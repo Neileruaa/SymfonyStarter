@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+    symfony:
+        build: .
+        container_name: php
+        depends_on:
+            - db
+        volumes:
+            - ./:/var/www/html/
+        ports:
+            - 8000:80
+    db:
+        container_name: mysql
+        image: mysql:5.7
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: pass
+            MYSQL_DATABASE: symfony_starter
+        volumes:
+            - database:/var/lib/mysql
+    pma:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+        restart: always
+        links:
+            - db:db
+        ports:
+            - 6034:80
+volumes:
+    database: ~
